@@ -39,5 +39,23 @@ public class Sprint1_testes {
 		assertFalse(biblioteca.usuarioRegularizado(user));
 	}
 	
+	@Test
+	public void registrarEmprestimo() {
+		biblioteca.addUsuario(user);
+		biblioteca.addLivro("Livro 1", "Fulano Mello");
+		biblioteca.registrarEmprestimo(user, "Livro 1", "23/04/2017");
+		assertFalse(biblioteca.livroDisponivel("Livro 1"));
+	}
+	
+	@Test
+	public void registrarDevolucao() {
+		biblioteca.addUsuario(user);
+		biblioteca.addLivro("Livro 1", "Fulano Mello");
+		biblioteca.registrarEmprestimo(user, "Livro 1", "23/04/2017");
+		biblioteca.registrarDevoluacao("Livro 1");
+		assertTrue(biblioteca.livroDisponivel("Livro 1"));
+	}
+	
+	
 
 }

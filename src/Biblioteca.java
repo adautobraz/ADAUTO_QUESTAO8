@@ -13,6 +13,37 @@ public class Biblioteca {
 		_nome = nome;
 	}
 	
+	public void registrarEmprestimo(Usuario user, String titulo, String data){
+		boolean found = false;
+		int i;
+		for(i=0; i<listaLivros.size() && !found; i++){
+			if(listaLivros.get(i).getTitle() == titulo)
+				found = true;
+		}
+		i--;
+		if(found){
+			Livro livro = listaLivros.get(i);
+			user.borrowLivro(livro.getNumCatalogo(), data);
+			livro.registrarEmprestimo(user.getName(), data);
+		}
+		else
+			System.out.println("Livro não consta nos registros");
+	}
+	
+	public void registrarDevoluacao(String titulo){
+		boolean found = false;
+		int i;
+		for(i=0; i<listaLivros.size() && !found; i++){
+			if(listaLivros.get(i).getTitle() == titulo)
+				found = true;
+		}
+		i--;
+		if(found){
+			Livro livro = listaLivros.get(i);
+			livro.registrarDevolucao();
+		}
+	}	
+	
 	public void addLivro(String titulo, String autor){
 		Livro livro = new Livro();
 		livro.addInfoLivro(titulo, autor, idCatalogo++);
@@ -42,6 +73,21 @@ public class Biblioteca {
 	
 	public boolean usuarioRegularizado(Usuario user){
 		return !usuariosBloqueados.containsKey(user);
+	}
+
+	public boolean livroDisponivel(String titulo) {
+		boolean found = false;
+		int i;
+		for(i=0; i<listaLivros.size() && !found; i++){
+			if(listaLivros.get(i).getTitle() == titulo)
+				found = true;
+		}
+		i--;
+		if(found){
+			Livro livro = listaLivros.get(i);
+			return livro.isAvaliable();
+		}
+		return false;
 	}
 	
 	
