@@ -40,4 +40,7 @@ public class Livro {
 		return isAvaliable;
 	}
 	
+	public String getUltimoUsuario(){
+		return ultimoUsuario;
+	}
 }

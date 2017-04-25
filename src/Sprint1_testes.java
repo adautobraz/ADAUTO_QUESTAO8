@@ -56,6 +56,24 @@ public class Sprint1_testes {
 		assertTrue(biblioteca.livroDisponivel("Livro 1"));
 	}
 	
+	@Test
+	public void permiteAcessoDoUsuario() {
+		assertFalse(biblioteca.acessarSistema(user));
+		biblioteca.addUsuario(user);
+		assertTrue(biblioteca.acessarSistema(user));
+	}
 	
-
+	@Test
+	public void consultaDeSituacao() {
+		biblioteca.addUsuario(user);
+		biblioteca.addLivro("Livro 1", "Fulano Mello");
+		assertEquals(biblioteca.consultarLivro("Livro 1"),"disponivel");
+		biblioteca.registrarEmprestimo(user, "Livro 1", "23/04/2017");
+		assertEquals(biblioteca.consultarLivro("Livro 1"),"retirado");
+		biblioteca.blockUsuario(user, 10);
+		assertEquals(biblioteca.consultarLivro("Livro 1"),"extraviado");
+		biblioteca.registrarDevoluacao("Livro 1");
+		assertEquals(biblioteca.consultarLivro("Livro 1"),"disponivel");
+	}
+		
 }

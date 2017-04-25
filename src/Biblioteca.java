@@ -31,15 +31,8 @@ public class Biblioteca {
 	}
 	
 	public void registrarDevoluacao(String titulo){
-		boolean found = false;
-		int i;
-		for(i=0; i<listaLivros.size() && !found; i++){
-			if(listaLivros.get(i).getTitle() == titulo)
-				found = true;
-		}
-		i--;
-		if(found){
-			Livro livro = listaLivros.get(i);
+		if(livroNoCatalogo(titulo)){
+			Livro livro = findLivro(titulo);
 			livro.registrarDevolucao();
 		}
 	}	
@@ -76,19 +69,65 @@ public class Biblioteca {
 	}
 
 	public boolean livroDisponivel(String titulo) {
-		boolean found = false;
-		int i;
-		for(i=0; i<listaLivros.size() && !found; i++){
-			if(listaLivros.get(i).getTitle() == titulo)
-				found = true;
-		}
-		i--;
-		if(found){
-			Livro livro = listaLivros.get(i);
+		if(livroNoCatalogo(titulo)){
+			Livro livro = findLivro(titulo);
 			return livro.isAvaliable();
 		}
 		return false;
 	}
 	
+	public boolean acessarSistema(Usuario user){
+		if(usuarioCadastrado(user))
+			return true;
+		return false;
+	}
+	
+	public boolean livroNoCatalogo(String titulo){
+		int i;
+		boolean found=false;
+		for(i=0; i<listaLivros.size() && !found; i++){
+			if(listaLivros.get(i).getTitle() == titulo)
+				found = true;
+		}
+		return found;
+	}
+	
+	public Livro findLivro(String titulo){
+		int i;
+		boolean found=false;
+		for(i=0; i<listaLivros.size() && !found; i++){
+			if(listaLivros.get(i).getTitle() == titulo)
+				found = true;
+		}
+		i--;
+		return listaLivros.get(i);
+	}
+	
+	public Usuario findUsuario(String nome){
+		int i;
+		boolean found=false;
+		for(i=0; i<listaUsuarios.size() && !found; i++){
+			if(listaUsuarios.get(i).getName() == nome)
+				found = true;
+		}
+		i--;
+		return listaUsuarios.get(i);
+	}
+	
+	public String consultarLivro(String titulo){
+		String situacao;
+		if(livroDisponivel(titulo))
+			situacao = "disponivel";
+		else{
+			Livro livro = findLivro(titulo);
+			String ulitmoUsuario = livro.getUltimoUsuario();
+			Usuario user = findUsuario(ulitmoUsuario);
+			if(usuarioRegularizado(user))
+				situacao = "retirado";
+			else
+				situacao = "extraviado";
+		}
+		return situacao;
+	}
 	
 }
